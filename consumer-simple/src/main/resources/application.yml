@@ -1,0 +1,10 @@
+##配置 context-path
+server:
+   port: 3000
+   servlet.context-path: /test-consumer
+spring:
+   application:
+      name: test-consumer
+##接口服务地址
+service:
+   url: http://127.0.0.1:2000/test-provider

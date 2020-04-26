@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cloud.core.repository.CustomerAddressRepository">
+
+    <insert id="save" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="addressId" keyColumn="address_id">
+        insert into customer_address(customer_id, receiver, gender, phone, email, country, province, city, district, detail, post_code, address_default, address_tag)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.customerId},
+            <choose>
+                <when test=" item.receiver != null and item.receiver != '' ">
+                    #{item.receiver},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=' item.gender == "M" or item.gender == "F" '>
+                    #{item.gender},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.phone != null and item.phone != '' ">
+                    #{item.phone},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.email != null and item.email != '' ">
+                    #{item.email},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.country != null and item.country != '' ">
+                    #{item.country},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.province != null and item.province != '' ">
+                    #{item.province},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.city != null and item.city != '' ">
+                    #{item.city},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.district != null and item.district != '' ">
+                    #{item.district},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.detail != null and item.detail != '' ">
+                    #{item.detail},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.postCode != null and item.postCode != '' ">
+                    #{item.postCode},
+                </when>
+                <otherwise>
+                    '000000',
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=' item.defaultFlag == "Y" '>
+                    'Y',
+                </when>
+                <otherwise>
+                    'N',
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=' item.addressDefault == "Y" '>
+                    'Y'
+                </when>
+                <otherwise>
+                    'N'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.address_tag != null and item.address_tag != '' ">
+                    #{item.address_tag}
+                </when>
+                <otherwise>
+                    null
+                </otherwise>
+            </choose>
+            )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map">
+        delete from customer_address tb
+        <include refid="whereSQL"/>
+    </delete>
+
+    <update id="update" parameterType="java.util.List">
+        <foreach collection="list" item="item">
+            update customer_address
+            <set>
+                <if test=" item.receiver != null and item.receiver != '' ">
+                    receiver = #{item.receiver},
+                </if>
+                <if test=' item.gender == "M" or item.gender == "F" '>
+                    gender = #{item.gender},
+                </if>
+                <if test=" item.phone != null and item.phone != '' ">
+                    phone = #{item.phone},
+                </if>
+                <if test=" item.email != null and item.email != '' ">
+                    email = #{item.email},
+                </if>
+                <if test=" item.country != null and item.country != '' ">
+                    country = #{item.country},
+                </if>
+                <if test=" item.province != null and item.province != '' ">
+                    province = #{item.province},
+                </if>
+                <if test=" item.city != null and item.city != '' ">
+                    city = #{item.city},
+                </if>
+                <if test=" item.district != null and item.district != '' ">
+                    district = #{item.district},
+                </if>
+                <if test=" item.detail != null and item.detail != '' ">
+                    detail = #{item.detail},
+                </if>
+                <if test=" item.postCode != null and item.postCode != '' ">
+                    post_code = #{item.postCode},
+                </if>
+                <if test=' item.addressDefault == "Y" or item.addressDefault == "N" '>
+                    address_default = #{item.addressDefault},
+                </if>
+                <if test=" item.addressTag != null and item.addressTag != '' ">
+                    addressTag = #{item.addressTag},
+                </if>
+            </set>
+            where address_id = #{item.addressId}
+            <if test=" item.customerId != null ">
+                and customer_id = #{item.customerId}
+            </if>
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BaseMapper.CustomerAddressMap">
+        select tb.*
+        from customer_address tb
+        where tb.address_id = #{id}
+    </select>
+
+    <select id="query" parameterType="java.util.Map" resultMap="BaseMapper.CustomerAddressMap">
+        select tb.* from customer_address tb inner join(select tb.address_id from customer_address tb
+        <include refid="whereSQL"/>
+        <include refid="orderBySQL"/>
+        <include refid="BaseMapper.pageMySQL"/>
+        ) t using(address_id)
+        <include refid="BaseMapper.orderBySQL"/>
+        <include refid="orderBySQL"/>
+    </select>
+
+    <select id="size" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(1) from customer_address tb
+        <include refid="whereSQL"/>
+    </select>
+
+    <sql id="orderBySQL">
+        <choose>
+            <when test=" orderBy != null and orderBy != '' ">
+                order by #{orderBy}
+            </when>
+            <otherwise>
+                order by tb.customer_id, tb.address_default desc, tb.address_id
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="whereSQL">
+        <where>
+            <if test=" addressId != null and addressId > 0 ">
+                and tb.address_id = #{addressId}
+            </if>
+            <if test=" addressIds != null and addressIds.size() > 0 ">
+                and tb.address_id in
+                <foreach collection="addressIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" customerId != null and customerId > 0 ">
+                and tb.customer_id = #{customerId}
+            </if>
+            <if test=" customerIds != null and customerIds.size() > 0 ">
+                and tb.address_id in
+                <foreach collection="customerIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" receiver != null and receiver != '' ">
+                and tb.receiver like concat('%', #{receiver}, '%')
+            </if>
+            <if test=" phone != null and phone != '' ">
+                and tb.phone like concat('%', #{phone}, '%')
+            </if>
+            <if test=" email != null and email != '' ">
+                and tb.email like concat('%', #{email}, '%')
+            </if>
+
+            <if test=" country != null and country != '' ">
+                and tb.country like concat('%', #{country}, '%')
+            </if>
+            <if test=" province != null and province != '' ">
+                and tb.province like concat('%', #{province}, '%')
+            </if>
+            <if test=" city != null and city != '' ">
+                and tb.city like concat('%', #{city}, '%')
+            </if>
+            <if test=" district != null and district != '' ">
+                and tb.district like concat('%', #{district}, '%')
+            </if>
+            <if test=" detail != null and detail != '' ">
+                and tb.detail like concat('%', #{detail}, '%')
+            </if>
+            <if test=" postCode != null and postCode != '' ">
+                and tb.post_code like concat('%', #{postCode}, '%')
+            </if>
+            <if test=" defaultFlag != null and defaultFlag != '' ">
+                and tb.address_default = #{defaultFlag}
+            </if>
+            <if test=" addressTag != null and addressTag != '' ">
+                and tb.address_tag = like concat('%', #{addressTag}, '%')
+            </if>
+        </where>
+    </sql>
+
+</mapper>
