@@ -1,0 +1,68 @@
+#****************Eureka单机配置****************
+server:
+  port: 1000
+  servlet.context-path: /@project.artifactId@
+
+spring:
+  application:
+    name: @project.artifactId@
+
+#****************Eureka配置****************
+spring.cloud.config.discovery.enabled: true
+eureka:
+  instance:
+    hostname: localhost
+    appname: ${spring.application.name}
+    prefer-ip-address: true
+    home-page-url-path: ${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+  client:
+    # 是否从Eureka Server获取注册信息，默认true。
+    # 当前是单一节点的Eureka Server，不需要同步其他Eureka Server节点的数据，设为false。
+    fetch-registry: false
+    # 是否将自己注册到Eureka Server，默认true。当前应用是Eureka Server设为false。
+    register-with-eureka: false
+    # 与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/。多个地址用 , 分隔。
+    service-url:
+      defaultZone: http://127.0.0.1:${server.port}${server.servlet.context-path}/eureka/
+
+#****************Springboot Actuator节点检查配置****************
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  # Springboot actuator 禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+#****************Springboot Actuator info 自定义元数据信息配置****************
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
+
+#****************Springboot日志配置****************
+logging:
+  config: classpath:logback-spring.xml
