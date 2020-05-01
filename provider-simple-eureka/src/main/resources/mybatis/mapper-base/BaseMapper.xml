@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BaseMapper">
+
+    <sql id="pageMySQL">
+        <choose>
+            <when test=" pageCurrent != null and pageSize != null and pageCurrent > 0 and pageSize > 0 ">
+                limit ${(pageCurrent - 1) * pageSize}, #{pageSize}
+            </when>
+            <otherwise>
+                limit 20
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="orderBySQL">
+        <if test=" orderBy != null and orderBy != '' ">
+            order by ${orderBy}
+        </if>
+    </sql>
+
+    <resultMap id="BaseMap" type="com.xyz.cloud.api.base.BaseVO">
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <resultMap id="CustomerAddressMap" type="com.xyz.cloud.api.entity.CustomerAddressVO" extends="BaseMap">
+        <id property="addressId" column="address_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="receiver" column="receiver"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="detail" column="detail"/>
+        <result property="postCode" column="post_code"/>
+        <result property="addressDefault" column="address_default"/>
+        <result property="addressTag" column="address_tag"/>
+    </resultMap>
+
+    <resultMap id="ProductMap" type="com.xyz.cloud.api.entity.ProductVO" extends="BaseMap">
+        <result property="productId" column="product_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="costPrice" column="cost_price"/>
+        <result property="sellPrice" column="sell_price"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="saleUnit" column="sale_unit"/>
+        <result property="productName" column="product_name"/>
+        <result property="productDetail" column="product_detail"/>
+        <result property="tags" column="tags"/>
+        <result property="imagePath" column="image_path"/>
+        <result property="saleFlag" column="sale_flag"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="stock" column="stock"/>
+        <result property="rest" column="rest"/>
+        <result property="onlineStart" column="online_start"/>
+        <result property="onlineEnd" column="online_end"/>
+        <result property="productScore" column="product_score"/>
+        <result property="sellQuantity" column="sell_quantity"/>
+    </resultMap>
+
+    <resultMap id="ProductLimitMap" type="com.xyz.cloud.api.entity.ProductLimitVO" autoMapping="true" extends="BaseMap">
+        <result property="limitId" column="limit_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="oneBuyLimit" column="one_buy_limit"/>
+    </resultMap>
+
+</mapper>
