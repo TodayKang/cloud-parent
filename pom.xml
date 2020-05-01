@@ -24,6 +24,7 @@
 
         <module>eureka-stand-alone</module>
         <module>eureka-nodes</module>
+        <module>eureka-stand-alone-auth</module>
         <module>eureka-server</module>
 
         <module>provider-simple</module>
