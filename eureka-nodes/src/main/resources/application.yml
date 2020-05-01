@@ -18,9 +18,9 @@ eureka:
     status-page-url-path: ${server.servlet.context-path}/actuator/info
 
 #****************Eureka互相注册地址配置****************
-eureka-server-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
-eureka-server-url-2: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
-eureka-server-url-3: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1002${server.servlet.context-path}/eureka/
+eureka-service-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-service-url-2: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-service-url-3: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1002${server.servlet.context-path}/eureka/
 
 #****************Eureka集群node配置****************
 ---  ## Eureka Server 1
@@ -33,7 +33,7 @@ eureka:
     hostname: node1
   client:
     serviceUrl:
-      defaultZone: ${eureka-server-url-1}
+      defaultZone: ${eureka-service-url-1}
 
 ---  ## Eureka Server 2
 spring:
@@ -45,7 +45,7 @@ eureka:
     hostname: node2
   client:
     serviceUrl:
-      defaultZone: ${eureka-server-url-1}
+      defaultZone: ${eureka-service-url-1}
 
 ---  ## Eureka Server 3
 spring:
@@ -57,7 +57,7 @@ eureka:
     hostname: node3
   client:
     serviceUrl:
-      defaultZone: ${eureka-server-url-1}
+      defaultZone: ${eureka-service-url-1}
 
 #****************Springboot Actuator节点检查配置****************
 management:
