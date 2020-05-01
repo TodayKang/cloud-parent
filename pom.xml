@@ -21,7 +21,7 @@
         <module>xyz-lang</module>
 
         <module>consumer-simple</module>
-        <module>provider-simple-eureka</module>
+        <module>consumer-simple-eureka</module>
 
         <module>eureka-stand-alone</module>
         <module>eureka-nodes</module>
