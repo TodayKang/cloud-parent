@@ -21,7 +21,7 @@ public class RedisService {
 	}
 
 	public void set(String key, Object value) {
-		redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(Constant.cacheSec));
+		redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(Constant.randomSec));
 	}
 
 	public void set(String key, Object value, Long seconds) {
