@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xyz.cloud.core.repository.ProductRepository">
+
+    <insert id="save" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="productId" keyColumn="product_id">
+        insert into product(category_id, cost_price, sell_price, market_price, sale_unit, product_name, product_detail, tags, image_path, stock, rest, online_start, online_end)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.categoryId}, #{item.costPrice}, #{item.sellPrice}, #{item.marketPrice},
+            <choose>
+                <when test=" item.saleUnit != null and item.saleUnit != '' ">
+                    replace(#item.saleUnit#,'',''),
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.productName != null and item.productName != '' ">
+                    #{item.productName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.productDetail != null and item.productDetail != '' ">
+                    #{item.productDetail},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.tags != null and item.tags != '' ">
+                    #{item.tags},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.imagePath != null and item.imagePath != '' ">
+                    #{item.imagePath},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.stock != null and item.stock > 0 ">
+                    #{item.stock},
+                    #{item.stock},
+                </when>
+                <otherwise>
+                    -1, -1
+                </otherwise>
+            </choose>
+            #{item.onlineStart}, #{item.onlineEnd})
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map">
+        delete from product tb
+        <include refid="whereSQL"/>
+    </delete>
+
+    <update id="update" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            update product
+            <set>
+                <if test=" item.categoryId != null ">
+                    category_id = #{item.categoryId},
+                </if>
+                <if test=" item.costPrice != null ">
+                    cost_price = #{item.costPrice},
+                </if>
+                <if test=" item.sellPrice != null ">
+                    sell_price = #{item.sellPrice},
+                </if>
+                <if test=" item.marketPrice != null ">
+                    market_price = #{item.marketPrice},
+                </if>
+                <if test=" item.saleUnit != null and item.saleUnit != '' ">
+                    sale_unit = #{item.saleUnit},
+                </if>
+                <if test=" item.productName != null and item.productName != '' ">
+                    product_name = #{item.productName},
+                </if>
+                <if test=" item.productDetail != null and item.productDetail != '' ">
+                    product_detail = #{item.productDetail},
+                </if>
+                <if test=" item.tags != null and item.tags != '' ">
+                    tags = #{item.tags},
+                </if>
+                <if test=" item.imagePath != null and item.imagePath != '' ">
+                    image_path = #{item.imagePath},
+                </if>
+                <if test=' item.saleFlag == "Y" or item.saleFlag == "N" '>
+                    sale_flag = #{item.saleFlag},
+                </if>
+                <if test=' item.deleteFlag != "Y" or item.deleteFlag == "N" '>
+                    delete_flag = #{item.deleteFlag},
+                </if>
+                <if test=" item.stock != null ">
+                    stock = #{item.stock},
+                </if>
+                <if test=" item.rest != null ">
+                    rest = #{item.rest},
+                </if>
+                <if test=" item.onlineStart != null ">
+                    online_start = #{item.onlineStart},
+                </if>
+                <if test=" item.onlineEnd != null ">
+                    online_end = #{item.onlineEnd},
+                </if>
+            </set>
+            where product_id = #{item.productId}
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BaseMapper.ProductMap">
+        select tb.*
+        from product tb
+        where tb.product_id = #{productId}
+    </select>
+
+    <select id="query" parameterType="java.util.Map" resultMap="BaseMapper.ProductMap">
+        select tb.* from product tb inner join(select tb.product_id from product tb
+        <include refid="whereSQL"/>
+        <include refid="BaseMapper.orderBySQL"/>
+        <include refid="BaseMapper.pageMySQL"/>
+        ) t using(product_id)
+        <include refid="BaseMapper.orderBySQL"/>
+    </select>
+
+    <select id="size" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(1) from product tb
+        <include refid="whereSQL"/>
+    </select>
+
+    <sql id="whereSQL">
+        <where>
+            <if test=" productId != null ">
+                and tb.product_id = #{productId}
+            </if>
+            <if test=" productIds != null and productIds.size() > 0 ">
+                and tb.product_id in
+                <foreach collection="productIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" categoryId != null and categoryId >0 ">
+                and tb.category_id = #{categoryId}
+            </if>
+            <if test=" categoryIds != null and categoryIds.size() > 0 ">
+                and tb.category_id in
+                <foreach collection="categoryIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" productName != null and productName != '' ">
+                and tb.product_name like concat('%', #{productName}, '%')
+            </if>
+            <if test=" productDetail != null and productDetail != '' ">
+                and tb.product_detail like concat('%', #{productDetail}, '%')
+            </if>
+            <if test=" tags != null and tags != '' ">
+                and tb.tags like concat('%', #{tags}, '%')
+            </if>
+            <if test=' saleFlag == "Y" or saleFlag == "N" '>
+                and tb.sale_flag = #{saleFlag}
+            </if>
+            <if test=' deleteFlag == "Y" or deleteFlag == "N" '>
+                and tb.delete_flag = #{deleteFlag}
+            </if>
+            <if test=" status == null or status = '' ">
+                and tb.sale_flag = 'Y'
+                and tb.delete_flag = 'N'
+                and tb.online_end > now()
+            </if>
+        </where>
+    </sql>
+
+</mapper>

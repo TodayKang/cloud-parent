@@ -1,0 +1,111 @@
+server:
+  port: 2000
+  servlet.context-path: /@project.artifactId@
+
+spring:
+  application:
+    name: @project.artifactId@
+  # 配置datasource
+  datasource:
+    name: db_mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/cloudtest?useUnicode=true;characterEncoding=UTF-8;useSSL=false
+      username: root
+      password: 1qaz2wsx
+      initial-size: 1
+      max-active: 1000
+      min-evictable-idle-time-millis: 30000
+      max-pool-prepared-statement-per-connection-size: 100
+      max-wait: 6000
+      min-idle: 1
+      pool-prepared-statements: false
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: false
+      time-between-eviction-runs-millis: 6000
+  # 配置Redis
+  redis:
+    database: 0
+    host: www.kangyong.xyz
+    password: Imissyou@4116
+    port: 6379
+    # 连接超时时间(毫秒)
+    timeout: 3s
+    # 采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
+    # 这个时候只有使用连接池,为每一个Jedis实例增加物理连接
+    #    jedis:
+    #      pool:
+    #        max-active: 8
+    #        max-idle: 8
+    #        min-idle: 1
+    #        max-wait: 3s
+    #        time-between-eviction-runs: 3000
+    # Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
+    # 因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
+    lettuce:
+      pool:
+        # 连接池最大连接数(使用负值表示没有限制)
+        max-active: 8
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 1
+        # 连接池最大阻塞等待时间(如果超过此时间将接到异常,设为-1表示无限制)
+        max-wait: 3s
+        # 空闲链接检测线程检测周期毫秒（负值表示不检测）(类型为Duration，添加秒)
+        time-between-eviction-runs: 3000
+      # 关闭超时时间
+      shutdown-timeout: 100
+
+## Mybatis配置
+mybatis:
+  config-location: classpath:mybatis/config/mybatis-config.xml
+  mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
+
+## 接口服务地址
+service:
+  url: http://127.0.0.1:2000/test-provider
+
+## Springboot Actuator start
+# Springboot Actuator 节点检查设置
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  # Springboot actuator 禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+# Springboot Actuator info 元数据信息设置
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
+## Springboot Actuator end
+
+## Springboot日志配置
+logging:
+  config: classpath:logback-spring.xml

@@ -1,10 +1,49 @@
-##配置 context-path
 server:
-   port: 3000
-   servlet.context-path: /test-consumer
+  port: 3000
+  servlet.context-path: /@project.artifactId@
+
 spring:
-   application:
-      name: test-consumer
+  application:
+    name: @project.artifactId@
+
 ##接口服务地址
 service:
-   url: http://127.0.0.1:2000/test-provider
+  url: http://127.0.0.1:2000/test-provider
+
+## Springboot Actuator start
+# Springboot Actuator 节点检查设置
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  # Springboot actuator 禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+# Springboot Actuator info 元数据信息设置
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
+## Springboot Actuator end

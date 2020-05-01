@@ -2,11 +2,15 @@
 
 <configuration debug="false">
 
+    <!-- 从SpringBoot配置文件获取信息 -->
+    <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="server-log"/>
+
     <!-- 引入外部文件统一配置 -->
-    <contextName>shop-core</contextName>
-    <property name="logback.appName" value="test-provider"/>
+    <property name="logback.appName" value="${applicationName}"/>
     <property name="logback.logLevel" value="INFO"/>
-    <property name="logback.basePath" value="/Users/admin/code-repository"/>
+    <property name="logback.basePath" value="/Users/admin/logs"/>
+
+    <contextName>${logback.appName}</contextName>
 
     <property name="logback.logPath" value="${logback.basePath}/${logback.appName}"/>
     <property name="logback.logPattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %contextName %-5level [%thread] [%F:%L %method] - %message%n"/>
@@ -78,7 +82,7 @@
     </appender>
 
     <!-- 打印 SQL 日志 -->
-    <logger name="com.**.repository" level="${logback.logLevel}" additivity="false">
+    <logger name="com.**.repository" level="DEBUG" additivity="false">
         <appender-ref ref="ConsoleAppender"/>
     </logger>
 
