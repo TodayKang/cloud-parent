@@ -2,13 +2,14 @@
 
 <configuration debug="false">
 
-    <!-- 从SpringBoot配置文件获取信息 -->
-    <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="server-log"/>
+    <!-- 从SpringBoot配置文件读取信息 -->
+    <!-- <springProperty scope="context" name="applicationName" source="spring.application.name"/> -->
 
     <!-- 引入外部文件统一配置 -->
-    <property name="logback.appName" value="${applicationName}"/>
     <property name="logback.logLevel" value="INFO"/>
-    <property name="logback.basePath" value="/Users/admin/logs"/>
+    <property name="logback.appName" value="eureka-nodes"/>
+    <!-- <property name="logback.basePath" value="/Users/admin/logs" /> -->
+    <property name="logback.basePath" value="./target/logs"/>
 
     <contextName>${logback.appName}</contextName>
 
@@ -32,26 +33,6 @@
             <pattern>${logback.logPattern}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-    </appender>
-
-    <!-- 按照每小时分割日志 -->
-    <appender name="RollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${logback.logPattern}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名 -->
-            <FileNamePattern>${logback.logPath}/${logback.appName}.%d{yyyy-MM-dd-HH}.log</FileNamePattern>
-            <!-- 日志文件保留小时数 -->
-            <MaxHistory>1800</MaxHistory>
-        </rollingPolicy>
-
-        <!-- 日志文件最大的大小 -->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>500MB</MaxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <!-- 打印 ERROR 日志到文件 -->
@@ -89,7 +70,6 @@
     <root level="${logback.logLevel}">
         <appender-ref ref="ConsoleAppender"/>
         <appender-ref ref="FileAppender"/>
-        <appender-ref ref="RollingFileAppender"/>
         <appender-ref ref="ErrorRollingFileAppender"/>
     </root>
 

@@ -1,25 +1,101 @@
-## 单机配置 context-path
+#****************Eureka集群配置****************
 server:
-  servlet.context-path: /eureka-base
-  port: 1000
+  servlet.context-path: /@project.artifactId@
 
 spring:
   application:
-    name: eureka-base
+    name: @project.artifactId@
 
-## eureka配置
+#****************Eureka配置****************
 spring.cloud.config.discovery.enabled: true
 eureka:
   instance:
-    hostname: eureka1
+    hostname: localhost
+    appname: ${spring.application.name}
+    prefer-ip-address: true
+    home-page-url-path: ${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+
+#****************Eureka互相注册地址配置****************
+eureka-server-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-server-url-2: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-server-url-3: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1002${server.servlet.context-path}/eureka/
+
+#****************Eureka集群node配置****************
+---  ## Eureka Server 1
+spring:
+  profiles: node1
+server:
+  port: 1001
+eureka:
+  instance:
+    hostname: node1
   client:
-    #是否从 Eureka Server 获取本实例的注册信息(默认true,当前是单个节点设为false)
-    fetch-registry: false
-    #是否将本实例注册到Eureka Server(默认true,当前应用是Eureka Server设为false)
-    register-with-eureka: false
-    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
-    service-url:
-      defaultZone: http://127.0.0.1:${server.port}${server.servlet.context-path}/eureka/
+    serviceUrl:
+      defaultZone: ${eureka-server-url-1}
 
+---  ## Eureka Server 2
+spring:
+  profiles: node2
+server:
+  port: 1002
+eureka:
+  instance:
+    hostname: node2
+  client:
+    serviceUrl:
+      defaultZone: ${eureka-server-url-1}
 
+---  ## Eureka Server 3
+spring:
+  profiles: node3
+server:
+  port: 1003
+eureka:
+  instance:
+    hostname: node3
+  client:
+    serviceUrl:
+      defaultZone: ${eureka-server-url-1}
+
+#****************Springboot Actuator节点检查配置****************
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  # Springboot actuator 禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+#****************Springboot Actuator info 自定义元数据信息配置****************
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
+
+#****************Springboot日志配置****************
+logging:
+  config: classpath:logback-spring.xml
 
