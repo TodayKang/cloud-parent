@@ -6,12 +6,11 @@ spring:
   application:
     name: @project.artifactId@
 
-##接口服务地址
+#****************接口服务地址配置****************
 service:
   url: http://127.0.0.1:2000/test-provider
 
-## Springboot Actuator start
-# Springboot Actuator 节点检查设置
+#****************Springboot Actuator节点检查配置****************
 management:
   endpoints:
     web:
@@ -30,7 +29,7 @@ management:
     redis:
       enabled: false
 
-# Springboot Actuator info 元数据信息设置
+#****************Springboot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -46,4 +45,7 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-## Springboot Actuator end
+
+#****************Springboot日志配置****************
+logging:
+  config: classpath:logback-spring.xml

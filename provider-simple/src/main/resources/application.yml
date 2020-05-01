@@ -5,12 +5,12 @@ server:
 spring:
   application:
     name: @project.artifactId@
-  # 配置datasource
+  #****************datasource配置****************
   datasource:
     name: db_mysql
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://127.0.0.1:3306/cloudtest?useUnicode=true;characterEncoding=UTF-8;useSSL=false
       username: root
       password: 1qaz2wsx
@@ -25,7 +25,7 @@ spring:
       test-on-return: false
       test-while-idle: false
       time-between-eviction-runs-millis: 6000
-  # 配置Redis
+  #****************Redis配置****************
   redis:
     database: 0
     host: www.kangyong.xyz
@@ -42,6 +42,7 @@ spring:
     #        min-idle: 1
     #        max-wait: 3s
     #        time-between-eviction-runs: 3000
+    #****************Lettuce连接配置****************
     # Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
     # 因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
     lettuce:
@@ -59,17 +60,12 @@ spring:
       # 关闭超时时间
       shutdown-timeout: 100
 
-## Mybatis配置
+##****************Mybatis配置****************
 mybatis:
   config-location: classpath:mybatis/config/mybatis-config.xml
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
 
-## 接口服务地址
-service:
-  url: http://127.0.0.1:2000/test-provider
-
-## Springboot Actuator start
-# Springboot Actuator 节点检查设置
+#****************Springboot Actuator节点检查配置****************
 management:
   endpoints:
     web:
@@ -88,7 +84,7 @@ management:
     redis:
       enabled: false
 
-# Springboot Actuator info 元数据信息设置
+#****************Springboot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -104,8 +100,7 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-## Springboot Actuator end
 
-## Springboot日志配置
+#****************Springboot日志配置****************
 logging:
   config: classpath:logback-spring.xml
