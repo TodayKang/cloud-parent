@@ -31,7 +31,7 @@ spring:
     host: www.kangyong.xyz
     password: Imissyou@4116
     port: 6379
-    # 连接超时时间(毫秒)
+    #连接超时时间(毫秒)
     timeout: 3s
     # 采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
     # 这个时候只有使用连接池,为每一个Jedis实例增加物理连接
@@ -66,23 +66,27 @@ mybatis:
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
 
 #****************Eureka配置****************
-#eureka service url(自定义)
+#Eureka服务提供者的URL(多个地址用 , 分隔)
 eureka-service-url: http://127.0.0.1:1000/eureka-simple/eureka/
 # Eureka配置
 eureka:
   client:
-    # 与 Eureka Server 交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
-    # spring.application.name 为 Eureka Server 指定注册的应用名称
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
+    #spring.application.name 为 Eureka Server 指定注册的应用名称
     service-url:
       defaultZone: ${eureka-service-url}
   instance:
-    # 是否将自己的 IP 注册到 Eureka Server(默认 false 表示注册微服务所在操作系统的 hostname 到 Eureka Server)
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
     prefer-ip-address: true
-    # Eureka可以自定义key-value的元数据
+    appname: ${spring.application.name}
+    home-page-url-path: /${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka可以自定义key-value的元数据
     metadata-map:
       service-function: 这是一个服务提供者
 
-#****************Springboot Actuator节点检查配置****************
+#****************SpringBoot Actuator配置****************
 management:
   endpoints:
     web:
@@ -96,12 +100,12 @@ management:
       show-details: always
     info:
       enabled: true
-  # Springboot actuator 禁用某项健康检查
+  #SpringBoot Actuator禁用某项健康检查
   health:
     redis:
       enabled: false
 
-#****************Springboot Actuator info 自定义元数据信息配置****************
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -117,7 +121,3 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-
-#****************Springboot日志配置****************
-logging:
-  config: classpath:logback-spring.xml

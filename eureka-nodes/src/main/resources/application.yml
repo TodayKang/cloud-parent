@@ -10,12 +10,15 @@ spring:
 spring.cloud.config.discovery.enabled: true
 eureka:
   instance:
-    hostname: localhost
-    appname: ${spring.application.name}
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
     prefer-ip-address: true
-    home-page-url-path: ${server.servlet.context-path}
+    appname: ${spring.application.name}
+    home-page-url-path: /${server.servlet.context-path}
     health-check-url-path: ${server.servlet.context-path}/actuator/health
     status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka可以自定义key-value的元数据
+    metadata-map:
+      service-function: 这是一个注册中心集群
 
 #****************Eureka互相注册地址配置****************
 eureka-service-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
@@ -59,7 +62,7 @@ eureka:
     serviceUrl:
       defaultZone: ${eureka-service-url-1}
 
-#****************Springboot Actuator节点检查配置****************
+#****************SpringBoot Actuator配置****************
 management:
   endpoints:
     web:
@@ -73,12 +76,12 @@ management:
       show-details: always
     info:
       enabled: true
-  # Springboot actuator 禁用某项健康检查
+  #SpringBoot Actuator禁用某项健康检查
   health:
     redis:
       enabled: false
 
-#****************Springboot Actuator info 自定义元数据信息配置****************
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -94,8 +97,3 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-
-#****************Springboot日志配置****************
-logging:
-  config: classpath:logback-spring.xml
-

@@ -31,10 +31,10 @@ spring:
     host: www.kangyong.xyz
     password: Imissyou@4116
     port: 6379
-    # 连接超时时间(毫秒)
+    #连接超时时间(毫秒)
     timeout: 3s
-    # 采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
-    # 这个时候只有使用连接池,为每一个Jedis实例增加物理连接
+    #采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
+    #这个时候只有使用连接池,为每一个Jedis实例增加物理连接
     #    jedis:
     #      pool:
     #        max-active: 8
@@ -43,8 +43,8 @@ spring:
     #        max-wait: 3s
     #        time-between-eviction-runs: 3000
     #****************Lettuce连接配置****************
-    # Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
-    # 因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
+    #Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
+    #因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
     lettuce:
       pool:
         # 连接池最大连接数(使用负值表示没有限制)
@@ -65,7 +65,7 @@ mybatis:
   config-location: classpath:mybatis/config/mybatis-config.xml
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
 
-#****************Springboot Actuator节点检查配置****************
+#****************SpringBoot Actuator配置****************
 management:
   endpoints:
     web:
@@ -79,12 +79,12 @@ management:
       show-details: always
     info:
       enabled: true
-  # Springboot actuator 禁用某项健康检查
+  #SpringBoot Actuator禁用某项健康检查
   health:
     redis:
       enabled: false
 
-#****************Springboot Actuator info 自定义元数据信息配置****************
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -100,7 +100,3 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-
-#****************Springboot日志配置****************
-logging:
-  config: classpath:logback-spring.xml

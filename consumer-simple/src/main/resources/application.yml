@@ -10,7 +10,7 @@ spring:
 service:
   url: http://127.0.0.1:2000/test-provider
 
-#****************Springboot Actuator节点检查配置****************
+#****************SpringBoot Actuator配置****************
 management:
   endpoints:
     web:
@@ -24,12 +24,12 @@ management:
       show-details: always
     info:
       enabled: true
-  # Springboot actuator 禁用某项健康检查
+  #SpringBoot Actuator禁用某项健康检查
   health:
     redis:
       enabled: false
 
-#****************Springboot Actuator info 自定义元数据信息配置****************
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -45,7 +45,3 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-
-#****************Springboot日志配置****************
-logging:
-  config: classpath:logback-spring.xml

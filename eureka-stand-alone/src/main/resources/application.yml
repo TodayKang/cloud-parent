@@ -10,24 +10,27 @@ spring:
 #****************Eureka配置****************
 spring.cloud.config.discovery.enabled: true
 eureka:
-  instance:
-    hostname: localhost
-    appname: ${spring.application.name}
-    prefer-ip-address: true
-    home-page-url-path: ${server.servlet.context-path}
-    health-check-url-path: ${server.servlet.context-path}/actuator/health
-    status-page-url-path: ${server.servlet.context-path}/actuator/info
   client:
-    # 是否从Eureka Server获取注册信息，默认true。
-    # 当前是单一节点的Eureka Server，不需要同步其他Eureka Server节点的数据，设为false。
+    #是否从Eureka Server获取注册信息，默认true。
+    #当前是单一节点的Eureka Server，不需要同步其他Eureka Server节点的数据，设为false。
     fetch-registry: false
-    # 是否将自己注册到Eureka Server，默认true。当前应用是Eureka Server设为false。
+    #是否将自己注册到Eureka Server，默认true。当前应用是Eureka Server设为false。
     register-with-eureka: false
-    # 与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/。多个地址用 , 分隔。
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/。多个地址用 , 分隔。
     service-url:
       defaultZone: http://127.0.0.1:${server.port}${server.servlet.context-path}/eureka/
+  instance:
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
+    prefer-ip-address: true
+    appname: ${spring.application.name}
+    home-page-url-path: /${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka可以自定义key-value的元数据
+    metadata-map:
+      service-function: 这是一个注册中心
 
-#****************Springboot Actuator节点检查配置****************
+#****************SpringBoot Actuator配置****************
 management:
   endpoints:
     web:
@@ -41,12 +44,12 @@ management:
       show-details: always
     info:
       enabled: true
-  # Springboot actuator 禁用某项健康检查
+  #SpringBoot Actuator禁用某项健康检查
   health:
     redis:
       enabled: false
 
-#****************Springboot Actuator info 自定义元数据信息配置****************
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
 info:
   application:
     application-name: ${spring.application.name}
@@ -62,7 +65,3 @@ info:
       source: @java.version@
       target: @java.version@
       version: @java.version@
-
-#****************Springboot日志配置****************
-logging:
-  config: classpath:logback-spring.xml
