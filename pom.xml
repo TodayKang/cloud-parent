@@ -20,16 +20,24 @@
         <module>cloud-api</module>
         <module>xyz-lang</module>
 
-        <module>consumer-simple</module>
-        <module>consumer-simple-eureka</module>
+        <!-- consumer未注册到Eureka -->
+        <module>consumer-eureka-no</module>
+        <!-- consumer注册到Eureka -->
+        <module>consumer-eureka</module>
+        <!-- consumer未注册到Eureka -->
+        <module>consumer-eureka-ribbon</module>
 
+        <!-- Eureka单机服务 -->
         <module>eureka-stand-alone</module>
+        <!-- Eureka集群服务 -->
         <module>eureka-nodes</module>
+        <!-- Eureka单机服务+登录验证 -->
         <module>eureka-stand-alone-auth</module>
-        <module>eureka-server</module>
 
-        <module>provider-simple</module>
-        <module>provider-simple-eureka</module>
+        <!-- provider未注册到Eureka -->
+        <module>provider-eureka-no</module>
+        <!-- provider注册到Eureka -->
+        <module>provider-eureka</module>
     </modules>
 
     <properties>

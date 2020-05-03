@@ -1,0 +1,68 @@
+server:
+  port: 3000
+  servlet.context-path: /@project.artifactId@
+
+spring:
+  application:
+    name: @project.artifactId@
+
+#****************Eureka配置****************
+#Eureka服务提供者的URL(多个地址用 , 分隔)
+eureka-service-url: http://127.0.0.1:1000/eureka-simple/eureka/
+# Eureka配置
+eureka:
+  client:
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
+    #spring.application.name 为 Eureka Server 指定注册的应用名称
+    service-url:
+      defaultZone: ${eureka-service-url}
+  instance:
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
+    prefer-ip-address: true
+    appname: ${spring.application.name}
+    home-page-url-path: /${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka可以自定义key-value的元数据
+    metadata-map:
+      service-function: 这是一个服务消费者
+
+#****************接口服务地址配置****************
+service:
+  url: http://127.0.0.1:2000/test-provider
+
+#****************SpringBoot Actuator配置****************
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  #SpringBoot Actuator禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
