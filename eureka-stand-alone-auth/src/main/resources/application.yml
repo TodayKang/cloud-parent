@@ -1,12 +1,15 @@
 #****************Eureka单机配置****************
+
+#****************SpringBoot服务端口****************
 server:
   port: 1000
-  servlet.context-path: /@project.artifactId@
+
+spring:
+  profiles:
+    #SpringBoot引入其他公共的配置信息
+    include: public
 
 #****************SpringBoot为Eureka添加用户认证****************
-spring:
-  application:
-    name: @project.artifactId@
   security:
     user:
       name: root
@@ -23,7 +26,7 @@ eureka:
     register-with-eureka: false
     #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/。多个地址用 , 分隔。
     service-url:
-      defaultZone: http://127.0.0.1:${server.port}${server.servlet.context-path}/eureka/
+      defaultZone: http://localhost:${server.port}${server.servlet.context-path}/eureka/
   instance:
     #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
     prefer-ip-address: true
@@ -34,39 +37,3 @@ eureka:
     #Eureka可以自定义key-value的元数据
     metadata-map:
       service-function: 这是一个注册中心
-
-#****************SpringBoot Actuator配置****************
-management:
-  endpoints:
-    web:
-      base-path: /actuator
-      exposure:
-        exclude:
-        include: health,info
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    info:
-      enabled: true
-  #SpringBoot Actuator禁用某项健康检查
-  health:
-    redis:
-      enabled: false
-
-#****************SpringBoot Actuator info 自定义元数据信息配置****************
-info:
-  application:
-    application-name: ${spring.application.name}
-    context-path: ${server.servlet.context-path}
-    port: ${server.port}
-    maven:
-      groupId: @project.groupId@
-      artifactId: @project.artifactId@
-      version: @project.version@
-      packaging: @project.packaging@
-      encoding: @project.build.sourceEncoding@
-    java:
-      source: @java.version@
-      target: @java.version@
-      version: @java.version@

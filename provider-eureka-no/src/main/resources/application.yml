@@ -1,11 +1,13 @@
+#****************SpringBoot服务端口****************
 server:
   port: 2000
-  servlet.context-path: /@project.artifactId@
 
 spring:
-  application:
-    name: @project.artifactId@
-  #****************datasource配置****************
+  profiles:
+    #SpringBoot引入其他公共的配置信息
+    include: public
+
+  #****************SpringBoot集成datasource****************
   datasource:
     name: db_mysql
     type: com.alibaba.druid.pool.DruidDataSource
@@ -25,7 +27,8 @@ spring:
       test-on-return: false
       test-while-idle: false
       time-between-eviction-runs-millis: 6000
-  #****************Redis配置****************
+
+  #****************SpringBoot集成Redis****************
   redis:
     database: 0
     host: www.kangyong.xyz
@@ -60,43 +63,7 @@ spring:
       # 关闭超时时间
       shutdown-timeout: 100
 
-##****************Mybatis配置****************
+#****************SpringBoot集成Mybatis****************
 mybatis:
   config-location: classpath:mybatis/config/mybatis-config.xml
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
-
-#****************SpringBoot Actuator配置****************
-management:
-  endpoints:
-    web:
-      base-path: /actuator
-      exposure:
-        exclude:
-        include: health,info
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    info:
-      enabled: true
-  #SpringBoot Actuator禁用某项健康检查
-  health:
-    redis:
-      enabled: false
-
-#****************SpringBoot Actuator info 自定义元数据信息配置****************
-info:
-  application:
-    application-name: ${spring.application.name}
-    context-path: ${server.servlet.context-path}
-    port: ${server.port}
-    maven:
-      groupId: @project.groupId@
-      artifactId: @project.artifactId@
-      version: @project.version@
-      packaging: @project.packaging@
-      encoding: @project.build.sourceEncoding@
-    java:
-      source: @java.version@
-      target: @java.version@
-      version: @java.version@

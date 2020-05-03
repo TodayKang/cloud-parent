@@ -52,8 +52,8 @@ mvn clean spring-boot:run -Dspring-boot.run.profiles=node3
 ```
 java -jar xxxx.jar
 java -jar xxxx.jar -–spring.profiles.active=prd
-java -jar eureka-server.jar --spring.profiles.active=node1
-java -jar eureka-server.jar --spring.profiles.active=node2
-java -jar eureka-server.jar --spring.profiles.active=node3
+java -jar eureka-nodes.jar --spring.profiles.active=node1
+java -jar eureka-nodes.jar --spring.profiles.active=node2
+java -jar eureka-nodes.jar --spring.profiles.active=node3
 
 

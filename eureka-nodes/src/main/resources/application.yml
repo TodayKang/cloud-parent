@@ -1,10 +1,8 @@
 #****************Eureka集群配置****************
-server:
-  servlet.context-path: /@project.artifactId@
-
 spring:
-  application:
-    name: @project.artifactId@
+  profiles:
+    #SpringBoot引入其他公共的配置信息
+    include: public
 
 #****************Eureka配置****************
 spring.cloud.config.discovery.enabled: true
@@ -21,9 +19,9 @@ eureka:
       service-function: 这是一个注册中心集群
 
 #****************Eureka互相注册地址配置****************
-eureka-service-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
-eureka-service-url-2: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
-eureka-service-url-3: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1002${server.servlet.context-path}/eureka/
+eureka-service-url-1: http://localhost:1002${server.servlet.context-path}/eureka/,http://localhost:1003${server.servlet.context-path}/eureka/
+eureka-service-url-2: http://localhost:1001${server.servlet.context-path}/eureka/,http://localhost:1003${server.servlet.context-path}/eureka/
+eureka-service-url-3: http://localhost:1001${server.servlet.context-path}/eureka/,http://localhost:1002${server.servlet.context-path}/eureka/
 
 #****************Eureka集群node配置****************
 ---  ## Eureka Server 1
@@ -48,7 +46,7 @@ eureka:
     hostname: node2
   client:
     serviceUrl:
-      defaultZone: ${eureka-service-url-1}
+      defaultZone: ${eureka-service-url-2}
 
 ---  ## Eureka Server 3
 spring:
@@ -60,40 +58,4 @@ eureka:
     hostname: node3
   client:
     serviceUrl:
-      defaultZone: ${eureka-service-url-1}
-
-#****************SpringBoot Actuator配置****************
-management:
-  endpoints:
-    web:
-      base-path: /actuator
-      exposure:
-        exclude:
-        include: health,info
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    info:
-      enabled: true
-  #SpringBoot Actuator禁用某项健康检查
-  health:
-    redis:
-      enabled: false
-
-#****************SpringBoot Actuator info 自定义元数据信息配置****************
-info:
-  application:
-    application-name: ${spring.application.name}
-    context-path: ${server.servlet.context-path}
-    port: ${server.port}
-    maven:
-      groupId: @project.groupId@
-      artifactId: @project.artifactId@
-      version: @project.version@
-      packaging: @project.packaging@
-      encoding: @project.build.sourceEncoding@
-    java:
-      source: @java.version@
-      target: @java.version@
-      version: @java.version@
+      defaultZone: ${eureka-service-url-3}

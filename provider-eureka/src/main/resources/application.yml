@@ -1,17 +1,19 @@
+#****************SpringBoot服务端口****************
 server:
   port: 2000
-  servlet.context-path: /@project.artifactId@
 
 spring:
-  application:
-    name: @project.artifactId@
-  #****************datasource配置****************
+  profiles:
+    #SpringBoot引入其他公共的配置信息
+    include: public
+
+  #****************SpringBoot集成datasource****************
   datasource:
     name: db_mysql
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/cloudtest?useUnicode=true;characterEncoding=UTF-8;useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/cloudtest?useUnicode=true;characterEncoding=UTF-8;useSSL=false;serverTimezone=Asia/Shanghai
       username: root
       password: 1qaz2wsx
       initial-size: 1
@@ -25,7 +27,8 @@ spring:
       test-on-return: false
       test-while-idle: false
       time-between-eviction-runs-millis: 6000
-  #****************Redis配置****************
+
+  #****************SpringBoot集成Redis****************
   redis:
     database: 0
     host: www.kangyong.xyz
@@ -33,8 +36,8 @@ spring:
     port: 6379
     #连接超时时间(毫秒)
     timeout: 3s
-    # 采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
-    # 这个时候只有使用连接池,为每一个Jedis实例增加物理连接
+    #采用Jedis连接，如果是在多线程的环境下,它是非线程安全的。
+    #这个时候只有使用连接池,为每一个Jedis实例增加物理连接
     #    jedis:
     #      pool:
     #        max-active: 8
@@ -43,8 +46,8 @@ spring:
     #        max-wait: 3s
     #        time-between-eviction-runs: 3000
     #****************Lettuce连接配置****************
-    # Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
-    # 因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
+    #Lettuce的连接，连接是基于Netty的，连接实例(StatefulRedisConnection) 可以在多个线程之间并发访问
+    #因为StatefulRedisConnection是线程安全的，一个实例连接就可以满足多线程环境，也可以自定义伸缩
     lettuce:
       pool:
         # 连接池最大连接数(使用负值表示没有限制)
@@ -60,14 +63,15 @@ spring:
       # 关闭超时时间
       shutdown-timeout: 100
 
-##****************Mybatis配置****************
+#****************SpringBoot集成Mybatis****************
 mybatis:
   config-location: classpath:mybatis/config/mybatis-config.xml
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
 
 #****************Eureka配置****************
 #Eureka服务提供者的URL(多个地址用 , 分隔)
-eureka-service-url: http://127.0.0.1:1000/eureka-simple/eureka/
+#eureka-service-url: http://localhost:1000/eureka-stand-alone/eureka/
+eureka-service-url: http://localhost:1001/eureka-nodes/eureka/,http://localhost:1002/eureka-nodes/eureka/,http://localhost:1003/eureka-nodes/eureka/
 # Eureka配置
 eureka:
   client:
@@ -85,39 +89,3 @@ eureka:
     #Eureka可以自定义key-value的元数据
     metadata-map:
       service-function: 这是一个服务提供者
-
-#****************SpringBoot Actuator配置****************
-management:
-  endpoints:
-    web:
-      base-path: /actuator
-      exposure:
-        exclude:
-        include: health,info
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    info:
-      enabled: true
-  #SpringBoot Actuator禁用某项健康检查
-  health:
-    redis:
-      enabled: false
-
-#****************SpringBoot Actuator info 自定义元数据信息配置****************
-info:
-  application:
-    application-name: ${spring.application.name}
-    context-path: ${server.servlet.context-path}
-    port: ${server.port}
-    maven:
-      groupId: @project.groupId@
-      artifactId: @project.artifactId@
-      version: @project.version@
-      packaging: @project.packaging@
-      encoding: @project.build.sourceEncoding@
-    java:
-      source: @java.version@
-      target: @java.version@
-      version: @java.version@

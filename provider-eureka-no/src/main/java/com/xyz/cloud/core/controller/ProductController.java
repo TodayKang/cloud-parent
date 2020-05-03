@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@Api(tags = { "产品信息相关接口" })
+@Api(tags = { "provider产品信息相关接口" })
 @RequestMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
@@ -47,7 +47,7 @@ public class ProductController {
 		return productService.update(arg);
 	}
 
-	@ApiOperation(value = "根据主键查询")
+	@ApiOperation(value = "根据产品ID查询")
 	@GetMapping(value = "/queryById/{id}")
 	public ProductVO query(@PathVariable("id") Long id) {
 		return productService.query(id);

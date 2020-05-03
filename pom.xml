@@ -24,8 +24,10 @@
         <module>consumer-eureka-no</module>
         <!-- consumer注册到Eureka -->
         <module>consumer-eureka</module>
-        <!-- consumer未注册到Eureka -->
+        <!-- consumer集成Ribbon -->
         <module>consumer-eureka-ribbon</module>
+        <!-- consumer集成Feign -->
+        <module>consumer-feign</module>
 
         <!-- Eureka单机服务 -->
         <module>eureka-stand-alone</module>
