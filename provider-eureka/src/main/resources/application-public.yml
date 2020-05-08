@@ -1,14 +1,5 @@
 #****************SpringBoot模块公共部分的配置****************
 
-#****************SpringBoot context-path配置****************
-server:
-  servlet.context-path: /@project.artifactId@
-
-#****************SpringBoot aplication.name配置****************
-spring:
-  application:
-    name: @project.artifactId@
-
 #****************SpringBoot Actuator配置****************
 management:
   endpoints:
