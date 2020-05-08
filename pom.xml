@@ -24,10 +24,23 @@
         <module>consumer-eureka-no</module>
         <!-- consumer注册到Eureka -->
         <module>consumer-eureka</module>
-        <!-- consumer集成Ribbon -->
-        <module>consumer-eureka-ribbon</module>
+
+        <!-- consumer基于RestTemplate整合Ribbon -->
+        <module>consumer-ribbon-rest-template</module>
+        <!-- consumer基于Java自定义代码整合Ribbon -->
+        <module>consumer-ribbon-java</module>
+        <!-- consumer基于属性自定义整合Ribbon -->
+        <module>consumer-ribbon-property</module>
+
         <!-- consumer集成Feign -->
         <module>consumer-feign</module>
+
+        <!-- consumer Hystrix集成Ribbon -->
+        <module>consumer-hystrix-ribbon</module>
+        <!-- consumer Hystrix集成Feign -->
+        <module>consumer-hystrix-feign</module>
+        <!-- consumer Hystrix集成Feign,通过Fallback Factory检查回退原因 -->
+        <module>consumer-hystrix-feign-factory</module>
 
         <!-- Eureka单机服务 -->
         <module>eureka-stand-alone</module>

@@ -1,30 +1,29 @@
 #****************Eureka单机配置****************
-
-#****************SpringBoot服务端口****************
 server:
   port: 1000
+  servlet.context-path: /@project.artifactId@
 
 spring:
+  application:
+    name: @project.artifactId@
+  #SpringBoot引入其他公共的配置信息
   profiles:
-    #SpringBoot引入其他公共的配置信息
     include: public
 
-#****************SpringBoot为Eureka添加用户认证****************
+  #****************SpringBoot为Eureka添加用户认证****************
   security:
     user:
       name: root
       password: root
 
 #****************Eureka配置****************
-spring.cloud.config.discovery.enabled: true
 eureka:
   client:
-    #是否从Eureka Server获取注册信息，默认true。
-    #当前是单一节点的Eureka Server，不需要同步其他Eureka Server节点的数据，设为false。
+    #是否从Eureka Server获取注册信息，默认true。当前是单一节点的Eureka Server，不需要同步其他Eureka Server节点的数据，设为false。
     fetch-registry: false
-    #是否将自己注册到Eureka Server，默认true。当前应用是Eureka Server设为false。
+    #是否将自己注册到Eureka Server，默认true。当前应用是Eureka Server，设为false。
     register-with-eureka: false
-    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/。多个地址用 , 分隔。
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址，默认:http://localhost:8761/eureka/，多个地址用 , 分隔。
     service-url:
       defaultZone: http://localhost:${server.port}${server.servlet.context-path}/eureka/
   instance:
@@ -36,4 +35,4 @@ eureka:
     status-page-url-path: ${server.servlet.context-path}/actuator/info
     #Eureka可以自定义key-value的元数据
     metadata-map:
-      service-function: 这是一个注册中心
+      service-function: 这是一个Eureka单机注册中心

@@ -1,0 +1,32 @@
+server:
+  port: 3000
+  servlet.context-path: /@project.artifactId@
+
+spring:
+  application:
+    name: @project.artifactId@
+  #SpringBoot引入其他公共的配置信息
+  profiles:
+    include: public
+
+#****************Eureka配置****************
+#Eureka服务提供者的URL(多个地址用 , 分隔)
+#eureka-service-url: http://localhost:1000/eureka-stand-alone/eureka/
+eureka-service-url: http://localhost:1001/eureka-nodes/eureka/,http://localhost:1002/eureka-nodes/eureka/,http://localhost:1003/eureka-nodes/eureka/
+# Eureka配置
+eureka:
+  client:
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
+    #spring.application.name 为 Eureka Server 指定注册的应用名称
+    service-url:
+      defaultZone: ${eureka-service-url}
+  instance:
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
+    prefer-ip-address: true
+    appname: ${spring.application.name}
+    home-page-url-path: /${server.servlet.context-path}
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka可以自定义key-value的元数据
+    metadata-map:
+      service-function: 这是一个服务消费者

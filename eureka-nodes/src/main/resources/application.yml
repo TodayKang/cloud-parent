@@ -1,7 +1,13 @@
 #****************Eureka集群配置****************
+server:
+  port: 1000
+  servlet.context-path: /@project.artifactId@
+
 spring:
+  application:
+    name: @project.artifactId@
+  #SpringBoot引入其他公共的配置信息
   profiles:
-    #SpringBoot引入其他公共的配置信息
     include: public
 
 #****************Eureka配置****************
@@ -16,7 +22,7 @@ eureka:
     status-page-url-path: ${server.servlet.context-path}/actuator/info
     #Eureka可以自定义key-value的元数据
     metadata-map:
-      service-function: 这是一个注册中心集群
+      service-function: 这是一个Eureka注册中心集群
 
 #****************Eureka互相注册地址配置****************
 eureka-service-url-1: http://localhost:1002${server.servlet.context-path}/eureka/,http://localhost:1003${server.servlet.context-path}/eureka/
@@ -33,7 +39,7 @@ eureka:
   instance:
     hostname: node1
   client:
-    serviceUrl:
+    service-url:
       defaultZone: ${eureka-service-url-1}
 
 ---  ## Eureka Server 2
@@ -45,7 +51,7 @@ eureka:
   instance:
     hostname: node2
   client:
-    serviceUrl:
+    service-url:
       defaultZone: ${eureka-service-url-2}
 
 ---  ## Eureka Server 3
@@ -57,5 +63,5 @@ eureka:
   instance:
     hostname: node3
   client:
-    serviceUrl:
+    service-url:
       defaultZone: ${eureka-service-url-3}
