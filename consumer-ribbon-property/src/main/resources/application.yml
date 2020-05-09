@@ -9,10 +9,9 @@ spring:
   profiles:
     include: public
 
-#****************Eureka配置****************
 #Eureka服务提供者的URL(多个地址用 , 分隔)
-#eureka-service-url: http://localhost:1000/eureka-stand-alone/eureka/
-eureka-service-url: http://localhost:1001/eureka-nodes/eureka/,http://localhost:1002/eureka-nodes/eureka/,http://localhost:1003/eureka-nodes/eureka/
+eureka-service-url: http://127.0.0.1:1000/eureka-stand-alone/eureka/
+#eureka-service-url: http://127.0.0.1:1001/eureka-nodes/eureka/,http://127.0.0.1:1002/eureka-nodes/eureka/,http://127.0.0.1:1003/eureka-nodes/eureka/
 # Eureka配置
 eureka:
   client:
@@ -23,10 +22,10 @@ eureka:
   instance:
     #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
     prefer-ip-address: true
-    appname: ${spring.application.name}
-    home-page-url-path: /${server.servlet.context-path}
-    health-check-url-path: ${server.servlet.context-path}/actuator/health
-    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    #Eureka客户端向服务端发送心跳的时间间隔，默认15秒
+    lease-renewal-interval-in-seconds: 5
+    #Eureka服务端在收到最后一次心跳之后等待的时间上限，超过则剔除（客户端告诉服务端按照此规则等待自己），默认90秒
+    lease-expiration-duration-in-seconds: 15
     #Eureka可以自定义key-value的元数据
     metadata-map:
       service-function: 这是一个服务消费者

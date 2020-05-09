@@ -16,18 +16,20 @@ eureka:
   instance:
     #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
     prefer-ip-address: true
-    appname: ${spring.application.name}
-    home-page-url-path: /${server.servlet.context-path}
-    health-check-url-path: ${server.servlet.context-path}/actuator/health
-    status-page-url-path: ${server.servlet.context-path}/actuator/info
     #Eureka可以自定义key-value的元数据
     metadata-map:
       service-function: 这是一个Eureka注册中心集群
+  #Eureka服务端配置
+  server:
+    #关闭保护机制，默认true
+    enable-self-preservation: false
+    # 剔除失效服务间隔，默认60000
+    eviction-interval-timer-in-ms: 3000
 
 #****************Eureka互相注册地址配置****************
-eureka-service-url-1: http://localhost:1002${server.servlet.context-path}/eureka/,http://localhost:1003${server.servlet.context-path}/eureka/
-eureka-service-url-2: http://localhost:1001${server.servlet.context-path}/eureka/,http://localhost:1003${server.servlet.context-path}/eureka/
-eureka-service-url-3: http://localhost:1001${server.servlet.context-path}/eureka/,http://localhost:1002${server.servlet.context-path}/eureka/
+eureka-service-url-1: http://127.0.0.1:1002${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-service-url-2: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1003${server.servlet.context-path}/eureka/
+eureka-service-url-3: http://127.0.0.1:1001${server.servlet.context-path}/eureka/,http://127.0.0.1:1002${server.servlet.context-path}/eureka/
 
 #****************Eureka集群node配置****************
 ---  ## Eureka Server 1
