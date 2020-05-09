@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api(tags = { "provider产品信息相关接口" })
-@RequestMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/product")
 public class ProductController {
 
 	@Autowired

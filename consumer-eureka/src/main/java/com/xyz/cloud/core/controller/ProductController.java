@@ -2,7 +2,6 @@ package com.xyz.cloud.core.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +12,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(tags = { "consumer产品信息相关接口" })
-@RequestMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/product")
 public class ProductController {
 
 	@Autowired

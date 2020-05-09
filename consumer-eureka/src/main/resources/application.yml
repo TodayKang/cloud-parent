@@ -11,10 +11,10 @@ spring:
 
 #****************接口服务地址配置****************
 service:
-  url1: http://127.0.0.1:2000/provider-eureka
+  url1: http://10.43.2.69:2000/provider-eureka
 
 #Eureka服务提供者的URL(多个地址用 , 分隔)
-eureka-service-url: http://127.0.0.1:1000/eureka-stand-alone/eureka/
+eureka-service-url: http://10.43.2.69:1000/eureka-stand-alone/eureka/
 #eureka-service-url: http://127.0.0.1:1001/eureka-nodes/eureka/,http://127.0.0.1:1002/eureka-nodes/eureka/,http://127.0.0.1:1003/eureka-nodes/eureka/
 # Eureka配置
 eureka:

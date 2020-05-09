@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(tags = { "Eureka Service服务" })
-@RequestMapping(value = "/eureka-server", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/eureka-server")
 public class EurekaServerController {
 
 	@Autowired
