@@ -61,10 +61,11 @@
         <!-- provider集成Oracle -->
         <module>provider-oracle</module>
 
-        <module>provider-oracle-trace</module>
-
         <module>config-server</module>
         <module>config-client</module>
+
+        <module>trace-provider-oracle</module>
+        <module>trace-zipkin-server</module>
     </modules>
 
     <properties>
