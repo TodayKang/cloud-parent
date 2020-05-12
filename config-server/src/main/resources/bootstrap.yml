@@ -1,0 +1,18 @@
+server:
+  port: 6010
+  servlet.context-path: /@project.artifactId@
+
+spring:
+  application:
+    name: @project.artifactId@
+  cloud:
+    config:
+      server:
+        #配置Git仓库
+        git:
+          #仓库地址
+          uri: https://github.com/TodayKang/cloud-config-repo.git
+          #Git账号
+          username: todaykang@163.com
+          #Git密码
+          password: Imissyou@6010

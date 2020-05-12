@@ -1,0 +1,41 @@
+#****************SpringBoot模块公共部分的配置****************
+
+#****************SpringBoot Actuator配置****************
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        exclude:
+        include: health,info
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+  #SpringBoot Actuator禁用某项健康检查
+  health:
+    redis:
+      enabled: false
+
+#****************SpringBoot Actuator info 自定义元数据信息配置****************
+info:
+  application:
+    application-name: ${spring.application.name}
+    context-path: ${server.servlet.context-path}
+    port: ${server.port}
+    maven:
+      groupId: @project.groupId@
+      artifactId: @project.artifactId@
+      version: @project.version@
+      packaging: @project.packaging@
+      encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+      version: @java.version@
+
+#****************SpringBoot logging配置****************
+logging:
+  config: classpath:logback-spring.xml

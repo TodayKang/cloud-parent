@@ -1,0 +1,4 @@
+spring:
+  #SpringBoot引入其他公共的配置信息
+  profiles:
+    include: public
