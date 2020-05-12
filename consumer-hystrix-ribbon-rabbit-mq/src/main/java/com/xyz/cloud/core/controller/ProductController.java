@@ -1,5 +1,10 @@
 package com.xyz.cloud.core.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -9,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import com.alibaba.fastjson.JSON;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.xyz.cloud.api.entity.ProductVO;
+import com.xyz.cloud.api.entity.OrderUserVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,19 +33,52 @@ public class ProductController {
 	private RestTemplate restTemplate;
 
 	@ApiOperation(value = "根据产品ID查询")
-	@HystrixCommand(fallbackMethod = "queryFallback", commandProperties = {
+	@HystrixCommand(fallbackMethod = "fallbackQueryById", commandProperties = {
 			// 超时时间
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
 			// 设置滚动时间窗的长度
 			@HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "30000") })
-	@GetMapping("/queryById/{productId}")
-	public ProductVO getById(@PathVariable(name = "productId") Long productId) {
-		return restTemplate.getForObject("http://product-eureka/product/queryById/" + productId, ProductVO.class);
+	@GetMapping("/queryById/{id}")
+	public OrderUserVO query(@PathVariable(name = "id") Long id) {
+		return restTemplate.getForObject("http://product-mysql/product/queryById/" + id, OrderUserVO.class);
 	}
 
-	public ProductVO queryFallback(Long id) {
-		log.info("queryFallback:id={}", id);
-		return new ProductVO();
+	@ApiOperation(value = "查询用户订单列表")
+	@HystrixCommand(fallbackMethod = "fallbackQuery", commandProperties = {
+			// 超时时间
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+			// 设置滚动时间窗的长度
+			@HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "30000") })
+	@PostMapping(value = "/query")
+	public List<OrderUserVO> query(@RequestBody Map<String, Object> map) {
+		OrderUserVO[] list = restTemplate.postForObject("http://provider-mysql/order-user/query", map, OrderUserVO[].class);
+		return new ArrayList<>(Arrays.asList(list));
+	}
+
+	@ApiOperation(value = "查询用户订单总数")
+	@HystrixCommand(fallbackMethod = "fallbackQuerySize", commandProperties = {
+			// 超时时间
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+			// 设置滚动时间窗的长度
+			@HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "30000") })
+	@PostMapping(value = "/size")
+	public Long size(@RequestBody Map<String, Object> map) {
+		return restTemplate.postForObject("http://provider-mysql/order-user/size", map, Long.class);
+	}
+
+	public OrderUserVO fallbackQueryById(Long id) {
+		log.info("fallbackQuery:req={}", id);
+		return new OrderUserVO();
+	}
+
+	public List<OrderUserVO> fallbackQuery(Map<String, Object> map) {
+		log.info("fallbackQuery:req={}", map);
+		return null;
+	}
+
+	public Long fallbackQuerySize(Map<String, Object> map) {
+		log.info("fallbackQuerySize:req={}", map);
+		return null;
 	}
 
 	@GetMapping("/provider-instance")

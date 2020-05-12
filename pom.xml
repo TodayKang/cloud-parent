@@ -42,6 +42,11 @@
         <!-- consumer Hystrix集成Feign,通过Fallback Factory检查回退原因 -->
         <module>consumer-hystrix-feign-factory</module>
 
+        <module>consumer-hystrix-ribbon-rabbit-mq</module>
+
+        <module>hystrix-dashboard</module>
+        <module>hystrix-turbine</module>
+
         <!-- Eureka单机服务 -->
         <module>eureka-stand-alone</module>
         <!-- Eureka集群服务 -->
@@ -55,6 +60,9 @@
         <module>provider-mysql</module>
         <!-- provider集成Oracle -->
         <module>provider-oracle</module>
+
+        <module>config-server</module>
+        <module>config-client</module>
     </modules>
 
     <properties>
