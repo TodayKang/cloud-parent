@@ -83,7 +83,7 @@ public class OrderUserService implements IOrderUserService {
 		Assert.notNull(id, ErrorCode.ERROR_PARAM);
 
 		StringBuilder key = new StringBuilder();
-		key.append(this.getClass().getSimpleName()).append("_").append(id);
+		key.append(this.getClass().getSimpleName()).append("_id_").append(id);
 
 		OrderUserVO orderUser = (OrderUserVO) redisService.get(key.toString());
 		if (orderUser == null) {
@@ -99,7 +99,7 @@ public class OrderUserService implements IOrderUserService {
 		map = MapUtils.isEmpty(map) ? new HashMap<>() : map;
 
 		StringBuilder key = new StringBuilder();
-		key.append(this.getClass().getSimpleName()).append("_").append(map.hashCode());
+		key.append(this.getClass().getSimpleName()).append("_query_").append(map.hashCode());
 
 		List<OrderUserVO> list = (List<OrderUserVO>) redisService.get(key.toString());
 		if (CollectionUtils.isEmpty(list)) {
@@ -116,7 +116,7 @@ public class OrderUserService implements IOrderUserService {
 
 		log.info("UserOrderService.size:req={}", map);
 		StringBuilder key = new StringBuilder();
-		key.append(this.getClass().getSimpleName()).append("_").append(map.hashCode());
+		key.append(this.getClass().getSimpleName()).append("_size_").append(map.hashCode());
 
 		Long size = (Long) redisService.get(key.toString());
 		if (size == null) {
