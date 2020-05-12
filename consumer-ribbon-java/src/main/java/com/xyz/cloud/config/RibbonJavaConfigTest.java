@@ -11,7 +11,7 @@ import com.xyz.ribbon.ConfigRibbon;
  * 可参考的示例: http://spring.io/guides/gs/client-side-load-balancing/
  */
 @Configuration
-@RibbonClient(name = "provider-eureka", configuration = ConfigRibbon.class)
+@RibbonClient(name = "provider-mysql", configuration = ConfigRibbon.class)
 public class RibbonJavaConfigTest {
 
 }

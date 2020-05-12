@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xyz.cloud.core.repository.IOrderUserRepository">
+
+    <resultMap id="BaseMap" type="com.xyz.cloud.api.base.BaseVO">
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <resultMap id="UserOrderMap" type="com.xyz.cloud.api.entity.OrderUserVO" extends="BaseMap">
+        <id property="orderUserId" column="user_order_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="orderType" column="order_type"/>
+        <result property="bizType" column="biz_type"/>
+        <result property="userId" column="user_id"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="orderUserId" keyColumn="user_order_id" parameterType="com.xyz.cloud.api.entity.OrderUserVO">
+        insert into ord_user_order(user_order_id, order_id, order_type, biz_type, user_id, delete_flag, create_time) values
+        ( #{item.orderId},
+        <choose>
+            <when test=" item.orderType != null and item.orderType != '' ">
+                #{item.orderType},
+            </when>
+            <otherwise>
+                null,
+            </otherwise>
+        </choose>
+        <choose>
+            <when test=" item.bizType != null and item.bizType != '' ">
+                #{item.bizType},
+            </when>
+            <otherwise>
+                null,
+            </otherwise>
+        </choose>
+        #{item.userId}, 'N', SYSDATE)
+    </insert>
+
+    <insert id="saveBatch" useGeneratedKeys="true" keyProperty="orderUserId" keyColumn="user_order_id" parameterType="java.util.List">
+        insert into ord_user_order(user_order_id, order_id, order_type, biz_type, user_id, delete_flag, create_time) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderId},
+            <choose>
+                <when test=" item.orderType != null and item.orderType != '' ">
+                    #{item.orderType},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test=" item.bizType != null and item.bizType != '' ">
+                    #{item.bizType},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            #{item.userId}, 'N', SYSDATE)
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map">
+        delete from ord_user_order tb
+        <include refid="whereSQL"/>
+    </delete>
+
+    <update id="update" parameterType="com.xyz.cloud.api.entity.OrderUserVO">
+        update ord_user_order
+        <set>
+            <if test=" item.orderId != null ">
+                order_id = #{item.orderId},
+            </if>
+            <if test=" item.orderType != null and item.orderType != '' ">
+                order_type = #{item.orderType},
+            </if>
+            <if test=" item.bizType != null and item.bizType != '' ">
+                biz_type = #{item.bizType},
+            </if>
+            <if test=" item.userId != null ">
+                user_id = #{item.userId},
+            </if>
+            <if test=' item.deleteFlag == "Y" or item.deleteFlag == "N" '>
+                delete_flag = #{item.deleteFlag},
+            </if>
+        </set>
+        where user_order_id = #{item.userOrderId}
+    </update>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            update ord_user_order
+            <set>
+                <if test=" item.orderId != null ">
+                    order_id = #{item.orderId},
+                </if>
+                <if test=" item.userId != null ">
+                    user_id = #{item.userId},
+                </if>
+                <if test=" item.orderType != null and item.orderType != '' ">
+                    order_type = #{item.orderType},
+                </if>
+                <if test=" item.bizType != null and item.bizType != '' ">
+                    biz_type = #{item.bizType},
+                </if>
+                <if test=' item.deleteFlag == "Y" or item.deleteFlag == "N" '>
+                    delete_flag = #{item.deleteFlag},
+                </if>
+            </set>
+            where user_order_id = #{item.userOrderId}
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="java.lang.Long" resultMap="UserOrderMap">
+        select tb.*
+        from ord_user_order tb
+        where tb.user_order_id = #{id}
+    </select>
+
+    <!-- 未分页查，默认查2000条-->
+    <select id="query" parameterType="java.util.Map" resultMap="UserOrderMap">
+        select tb.* from (select tb.*, rownum rn from (select tb.* from ord_user_order tb
+        <include refid="whereSQL"/>
+        <include refid="orderBySQL"/>) tb
+        <where>
+            <choose>
+                <when test=" pageCurrent != null and pageSize != null and pageCurrent > 0 and pageSize > 0 ">
+                    and ${pageCurrent * pageSize} >= rownum
+                </when>
+                <otherwise>
+                    and 2000 >= rownum
+                </otherwise>
+            </choose>
+        </where>
+        ) tb
+        <if test=" pageCurrent != null and pageSize != null and pageCurrent > 0 and pageSize > 0 ">
+            where tb.rn >= ${(pageCurrent - 1) * pageSize + 1}
+        </if>
+        <include refid="orderBySQL"/>
+    </select>
+
+    <select id="size" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(1) from ord_user_order tb
+        <include refid="whereSQL"/>
+    </select>
+
+    <sql id="orderBySQL">
+        <if test=" orderBy != null and orderBy != '' ">
+            order by ${orderBy}
+        </if>
+    </sql>
+
+    <sql id="whereSQL">
+        <where>
+            <if test=" userOrderId != null ">
+                and tb.user_order_id = #{userOrderId}
+            </if>
+            <if test=" userOrderIds != null and userOrderIds.size() > 0 ">
+                and tb.user_order_id in
+                <foreach collection="userOrderIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" orderId != null and orderId >0 ">
+                and tb.order_id = #{orderId}
+            </if>
+            <if test=" orderIds != null and orderIds.size() > 0 ">
+                and tb.order_id in
+                <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" userId != null and userId >0 ">
+                and tb.user_id = #{userId}
+            </if>
+            <if test=" userIds != null and userIds.size() > 0 ">
+                and tb.user_id in
+                <foreach collection="userIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test=" orderType != null and orderType != '' ">
+                and tb.order_type like concat('%', #{orderType}, '%')
+            </if>
+            <if test=" bizType != null and bizType != '' ">
+                and tb.biz_type = #{bizType}
+            </if>
+            <if test=' deleteFlag == "Y" or deleteFlag == "N" '>
+                and tb.delete_flag = #{deleteFlag}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

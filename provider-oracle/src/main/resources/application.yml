@@ -1,22 +1,25 @@
 #****************SpringBoot服务端口****************
 server:
   port: 2000
+  servlet.context-path: /@project.artifactId@
 
 spring:
+  application:
+    name: @project.artifactId@
+  #SpringBoot引入其他公共的配置信息
   profiles:
-    #SpringBoot引入其他公共的配置信息
     include: public
 
   #****************SpringBoot配置datasource****************
   datasource:
     name: db_mysql
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: oracle.jdbc.driver.OracleDriver
     druid:
       #基本属性 url、user、password
-      url: jdbc:mysql://127.0.0.1:3306/cloudtest?useUnicode=true;characterEncoding=UTF-8;useSSL=false
-      username: root
-      password: 1qaz2wsx
+      url: jdbc:oracle:thin:@10.200.4.15:1521:lvmamadb
+      username: lvmama_super
+      password: oU7Reu3nLh
       #配置初始化大小、最小、最大
       initial-size: 5
       min-idle: 10
@@ -73,3 +76,25 @@ spring:
 mybatis:
   config-location: classpath:mybatis/config/mybatis-config.xml
   mapper-locations: classpath:mybatis/**/mapper/*Mapper.xml,classpath*:mybatis/**/mapper-base/*Mapper.xml
+
+#****************Eureka配置****************
+#Eureka服务提供者的URL(多个地址用 , 分隔)
+eureka-service-url: http://127.0.0.1:1000/eureka-stand-alone/eureka/
+#eureka-service-url: http://127.0.0.1:1001/eureka-nodes/eureka/,http://127.0.0.1:1002/eureka-nodes/eureka/,http://127.0.0.1:1003/eureka-nodes/eureka/
+# Eureka配置
+eureka:
+  client:
+    #与Eureka Server交互的地址，查询服务和注册服务都依赖这个地址(默认: http://localhost:8761/eureka/ ,多个地址用 , 分隔)
+    #spring.application.name 为 Eureka Server 指定注册的应用名称
+    service-url:
+      defaultZone: ${eureka-service-url}
+  instance:
+    #是否将自己的 IP 注册到 Eureka Server(默认 false,表示注册微服务所在操作系统的 hostname 到Eureka Server)
+    prefer-ip-address: true
+    #Eureka客户端向服务端发送心跳的时间间隔，默认15秒
+    lease-renewal-interval-in-seconds: 5
+    #Eureka服务端在收到最后一次心跳之后等待的时间上限，超过则剔除（客户端告诉服务端按照此规则等待自己），默认90秒
+    lease-expiration-duration-in-seconds: 15
+    #Eureka可以自定义key-value的元数据
+    metadata-map:
+      service-function: 这是一个服务提供者

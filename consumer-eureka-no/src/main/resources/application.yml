@@ -9,4 +9,4 @@ spring:
 
 #****************接口服务地址配置****************
 service:
-  url1: http://localhost:2000/provider-eureka-no
+  url1: http://127.0.0.1:2000/provider-eureka-no

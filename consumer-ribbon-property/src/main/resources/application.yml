@@ -37,6 +37,6 @@ eureka:
 #NFLoadBatancerPingClaslame:配置Iping的实现热
 #NIMSServerListClassName:配置 Serverlist的实现类
 #NIMSServerListFilterClassName:配置ServerListFilter的实现类
-provider-eureka:
+provider-mysql:
   ribbon:
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule

@@ -52,7 +52,9 @@
         <!-- provider未注册到Eureka -->
         <module>provider-eureka-no</module>
         <!-- provider注册到Eureka -->
-        <module>provider-eureka</module>
+        <module>provider-mysql</module>
+        <!-- provider集成Oracle -->
+        <module>provider-oracle</module>
     </modules>
 
     <properties>

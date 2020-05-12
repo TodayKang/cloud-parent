@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="false">
+
+    <!-- 从SpringBoot配置文件读取信息(此种方式不可靠) -->
+    <!-- <springProperty scope="context" name="logback.level" source="logback.level"/> -->
+
+    <!-- 引入外部文件统一配置 -->
+    <property name="logback.level" value="INFO"/>
+    <property name="logback.directory" value="./target"/>
+    <property name="logback.contextPath" value="provider-mysql"/>
+
+    <property name="logback.path" value="${logback.directory}/${logback.contextPath}"/>
+    <property name="logback.pattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %contextName %-5level [%thread] [%F:%L %method] - %message%n"/>
+
+    <contextName>${logback.contextPath}</contextName>
+
+    <!-- Console 打印日志 -->
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${logback.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 打印所有日志 -->
+    <appender name="FileAppender" class="ch.qos.logback.core.FileAppender">
+        <append>true</append>
+        <file>${logback.path}/${logback.contextPath}.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${logback.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 打印 ERROR 日志到文件 -->
+    <appender name="ErrorRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${logback.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <FileNamePattern>${logback.path}/${logback.contextPath}-error.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>90</MaxHistory>
+        </rollingPolicy>
+
+        <!-- 日志文件最大的大小 -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>500MB</MaxFileSize>
+        </triggeringPolicy>
+
+        <!-- 所有 ERROR 日志都在这里 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 打印 SQL 日志 -->
+    <logger name="com.**.repository" level="DEBUG" additivity="false">
+        <appender-ref ref="ConsoleAppender"/>
+    </logger>
+
+    <root level="${logback.level}">
+        <appender-ref ref="ConsoleAppender"/>
+        <appender-ref ref="FileAppender"/>
+        <appender-ref ref="ErrorRollingFileAppender"/>
+    </root>
+
+</configuration>
