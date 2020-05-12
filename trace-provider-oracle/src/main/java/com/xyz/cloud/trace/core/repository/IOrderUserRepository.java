@@ -3,9 +3,10 @@ package com.xyz.cloud.trace.core.repository;
 import java.util.List;
 import java.util.Map;
 
-import com.xyz.cloud.trace.api.entity.OrderUserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import com.xyz.cloud.api.entity.OrderUserVO;
 
 @Mapper
 @Repository
