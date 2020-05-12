@@ -5,18 +5,18 @@ server:
 spring:
   application:
     name: @project.artifactId@
-  #SpringBoot引入其他公共的配置信息
-  profiles:
-    include: public
-  #Spring Cloud统一配置
   cloud:
     config:
       server:
         #配置Git仓库
         git:
           #仓库地址
-          uri: https://github.com/TodayKang/cloud-config-repo.git
+          uri: https://github.com/TodayKang/cloud-config.git
           #Git账号
           username: todaykang@163.com
           #Git密码
           password: Imissyou@6010
+          #Git默认分支
+          default-label: master
+          #仓库文件夹目录(/**表示所有目录所有文件)
+          search-paths: cloud-config

@@ -1,15 +1,12 @@
-server:
-  port: 6000
-  servlet.context-path: /@project.artifactId@
-
 spring:
   application:
-    name: @project.artifactId@
+  	#对应Config Server所获取的配置文件的{application}
+    name: cloud-config
   cloud:
     config:
       #Config Server地址，默认: http://localhost:8888
-      uri: http://127.0.0.1:${server.port}${server.servlet.context-path}
-      #Config Server所获取的配置文件中的{profile}
+      uri: http://127.0.0.1:6010/config-server/
+      #profile对应Config Server所获取的配置文件中的{profile} 
       profile: dev
-      #Git仓库的分支名称，对应Config Server所获取的配置文件的{label}
+      #指定Git仓库的分支，对应Config Server所获取的配置文件的{label}
       label: master

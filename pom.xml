@@ -61,6 +61,8 @@
         <!-- provider集成Oracle -->
         <module>provider-oracle</module>
 
+        <module>provider-oracle-trace</module>
+
         <module>config-server</module>
         <module>config-client</module>
     </modules>

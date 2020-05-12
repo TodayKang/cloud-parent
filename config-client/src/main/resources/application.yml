@@ -1,4 +1,18 @@
+server:
+  port: 6000
+  servlet.context-path: /@project.artifactId@
+
 spring:
+  application:
+    name: @project.artifactId@
   #SpringBoot引入其他公共的配置信息
   profiles:
     include: public
+  cloud:
+    config:
+      uri: http://127.0.0.1:6010/config-server/cloud-config
+      #Config Server所获取的配置文件中的{profile}
+      profile: dev
+      #Git仓库的分支名称，对应Config Server所获取的配置文件的{label}
+      label: master
+
