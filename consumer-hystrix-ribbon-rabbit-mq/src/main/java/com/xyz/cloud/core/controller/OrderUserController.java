@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@Api(tags = { "consumer产品信息相关接口" })
-@RequestMapping(value = "/product")
-public class ProductController {
+@Api(tags = { "服务消费者-用户订单" })
+@RequestMapping(value = "/order-user")
+public class OrderUserController {
 
 	@Autowired
 	private LoadBalancerClient loadBalancerClient;
