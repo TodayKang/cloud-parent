@@ -39,5 +39,6 @@ info:
 #****************SpringBoot logging配置****************
 logging:
   config: classpath:logback-spring.xml
-  level: info
-  org.springframework.web.servlet: debug
+  level:
+    root: info
+    org.springframework.web.servlet: debug
