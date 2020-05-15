@@ -60,6 +60,7 @@
         <module>provider-mysql</module>
         <!-- provider集成Oracle -->
         <module>provider-oracle</module>
+        <module>provider-multi-db</module>
 
         <module>config-server</module>
         <module>config-client</module>

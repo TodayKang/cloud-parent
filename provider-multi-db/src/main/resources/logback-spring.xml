@@ -8,7 +8,7 @@
     <!-- 引入外部文件统一配置 -->
     <property name="logback.level" value="INFO"/>
     <property name="logback.directory" value="./target"/>
-    <property name="logback.contextPath" value="trace-zipkin-server"/>
+    <property name="logback.contextPath" value="provider-oracle"/>
 
     <property name="logback.path" value="${logback.directory}/${logback.contextPath}"/>
     <property name="logback.pattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %contextName %-5level [%thread] [%F:%L %method] - %message%n"/>

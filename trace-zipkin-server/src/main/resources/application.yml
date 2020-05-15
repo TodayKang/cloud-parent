@@ -1,11 +1,8 @@
 #****************SpringBoot服务端口****************
 server:
-  port: 2000
+  port: 1010
   servlet.context-path: /@project.artifactId@
 
 spring:
   application:
     name: @project.artifactId@
-  #SpringBoot引入其他公共的配置信息
-  profiles:
-    include: public

@@ -28,7 +28,7 @@ eureka:
       service-function: 这是一个Eureka单机注册中心
   #Eureka服务端配置
   server:
-    #关闭保护机制，默认true
+    #自我保护机制，默认true(关闭自我保护，保证会注销微服务)
     enable-self-preservation: false
-    # 剔除失效服务间隔，默认60000
+    # 剔除失效服务间隔，默认60000毫秒
     eviction-interval-timer-in-ms: 3000
